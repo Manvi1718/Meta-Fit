@@ -4,6 +4,8 @@ import 'package:metafit/pages/favourite.dart';
 import 'package:metafit/pages/home.dart';
 import 'package:metafit/pages/nutrition.dart';
 import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
+import 'package:metafit/utils/TextFunctions/Headings.dart';
+import 'package:metafit/utils/TextFunctions/text.dart';
 import 'package:metafit/utils/all_exercises.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<AllExercises> allExercises;
+  List<AllExercises>? allExercisesList;
+
   int selectedIndexOfNavigation = 0;
 
   PageController pageController = PageController();
@@ -26,17 +29,28 @@ class _HomeState extends State<Home> {
     pageController.jumpToPage(index);
   }
 
+  void loadExercises() async {
+    var exercises = await fetchExercises();
+    setState(() {
+      allExercisesList = exercises;
+    });
+  }
+
   @override
   void initState() {
-    allExercises = fetchExercises();
     super.initState();
+    loadExercises();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MetaFit'),
+        title: Headings(
+          text: 'MetaFit',
+          color: Colors.white,
+          size: 30,
+        ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       bottomNavigationBar: NavigationBar(
@@ -79,7 +93,21 @@ class _HomeState extends State<Home> {
         controller: pageController,
         children: [
           HomePage(),
-          ExercisesPage(),
+          allExercisesList == null
+              ? Center(
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      ModifiedText(
+                          text: 'Loading please wait....',
+                          color: Colors.white54,
+                          size: 20)
+                    ],
+                  ),
+                )
+              : ExercisesPage(
+                  allExercises: allExercisesList!,
+                ),
           NutritionPage(),
           FavouritePage(),
         ],

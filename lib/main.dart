@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/pages/Initial.dart';
+import 'package:metafit/pages/initial.dart';
 
 void main() {
   runApp(MyApp());
