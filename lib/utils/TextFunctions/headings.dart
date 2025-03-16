@@ -12,7 +12,8 @@ class Headings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: GoogleFonts.oswald(color: color, fontSize: size),
+      style: GoogleFonts.oswald(
+          color: color, fontSize: size, fontWeight: FontWeight.bold),
     );
   }
 }

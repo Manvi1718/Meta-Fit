@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:metafit/pages/category_choosing.dart';
+import 'package:metafit/utils/exercise_description.dart';
 import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
@@ -22,7 +24,22 @@ class ExercisesPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Headings(text: 'Exercises', color: Colors.white54, size: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Headings(text: 'Exercises', color: Colors.white54, size: 25),
+              InkWell(
+                onTap: () {
+                  showCategory(context: context);
+                },
+                child: Icon(
+                  Icons.category_outlined,
+                  color: Colors.white70,
+                  semanticLabel: 'Category',
+                ),
+              )
+            ],
+          ),
           SizedBox(
             height: 15,
           ),
@@ -31,7 +48,12 @@ class ExercisesPage extends StatelessWidget {
               itemCount: allExercises.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    showExerciseDescription(
+                      context: context,
+                      exercise: allExercises[index],
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -66,7 +88,7 @@ class ExercisesPage extends StatelessWidget {
                             ),
                             ModifiedText(
                               text:
-                                  'Target Muscles : ${allExercises[index].target.name}',
+                                  '🎯 Target Muscles : ${allExercises[index].target.name}',
                               color: Colors.white,
                               size: 12,
                             ),
@@ -78,7 +100,7 @@ class ExercisesPage extends StatelessWidget {
                               children: [
                                 ModifiedText(
                                   text:
-                                      'Equipment : ${allExercises[index].equipment}',
+                                      '🏋️ Equipment : ${allExercises[index].equipment}',
                                   color: Colors.white,
                                   size: 12,
                                 ),

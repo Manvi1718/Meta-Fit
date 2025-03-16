@@ -6,7 +6,7 @@ import 'package:metafit/pages/nutrition.dart';
 import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
-import 'package:metafit/utils/all_exercises.dart';
+import 'package:metafit/utils/fetching/all_exercises.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,17 +29,20 @@ class _HomeState extends State<Home> {
     pageController.jumpToPage(index);
   }
 
-  void loadExercises() async {
-    var exercises = await fetchExercises();
+  void necessaryloading() async {
+    final results = await Future.wait([
+      fetchExercises(),
+    ]);
+
     setState(() {
-      allExercisesList = exercises;
+      allExercisesList = results[0];
     });
   }
 
   @override
   void initState() {
     super.initState();
-    loadExercises();
+    necessaryloading();
   }
 
   @override
@@ -96,12 +99,14 @@ class _HomeState extends State<Home> {
           allExercisesList == null
               ? Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
+                      SizedBox(height: 20),
                       ModifiedText(
                           text: 'Loading please wait....',
                           color: Colors.white54,
-                          size: 20)
+                          size: 15)
                     ],
                   ),
                 )
