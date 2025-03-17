@@ -47,13 +47,13 @@ void showExerciseDescription({
                   Headings(text: exercise.name, color: Colors.white, size: 30),
                   SizedBox(height: 5),
                   ModifiedText(
-                    text: '🎯 Target : ${exercise.target.name}',
+                    text: '🎯 Target : ${exercise.target}',
                     color: const Color.fromARGB(255, 251, 237, 108),
                     size: 15,
                   ),
                   SizedBox(height: 5),
                   ModifiedText(
-                    text: '💪Body Part : ${exercise.bodyPart.name}',
+                    text: '💪Body Part : ${exercise.bodyPart}',
                     color: Colors.yellow,
                     size: 15,
                   ),

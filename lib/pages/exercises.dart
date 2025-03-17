@@ -79,7 +79,8 @@ class ExercisesPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Headings(
-                              text: allExercises[index].name,
+                              text:
+                                  '${index + 1} - ${allExercises[index].name}',
                               color: Colors.white,
                               size: 20,
                             ),
@@ -88,7 +89,7 @@ class ExercisesPage extends StatelessWidget {
                             ),
                             ModifiedText(
                               text:
-                                  '🎯 Target Muscles : ${allExercises[index].target.name}',
+                                  '🎯 Target Muscles : ${allExercises[index].target}',
                               color: Colors.white,
                               size: 12,
                             ),

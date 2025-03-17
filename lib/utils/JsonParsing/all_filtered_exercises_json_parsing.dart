@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final allFilteredExercises = allFilteredExercisesFromJson(jsonString);
-
 import 'dart:convert';
 
 List<AllFilteredExercises> allFilteredExercisesFromJson(String str) =>
@@ -13,7 +9,7 @@ String allFilteredExercisesToJson(List<AllFilteredExercises> data) =>
 
 class AllFilteredExercises {
   String bodyPart;
-  Equipment equipment;
+  String equipment;
   String gifUrl;
   String id;
   String name;
@@ -34,20 +30,23 @@ class AllFilteredExercises {
 
   factory AllFilteredExercises.fromJson(Map<String, dynamic> json) =>
       AllFilteredExercises(
-        bodyPart: json["bodyPart"],
-        equipment: equipmentValues.map[json["equipment"]]!,
-        gifUrl: json["gifUrl"],
-        id: json["id"],
-        name: json["name"],
-        target: json["target"],
-        secondaryMuscles:
-            List<String>.from(json["secondaryMuscles"].map((x) => x)),
-        instructions: List<String>.from(json["instructions"].map((x) => x)),
+        bodyPart: json["bodyPart"] ?? "Unknown", // Handle missing data
+        equipment: json["equipment"] ?? "Unknown",
+        gifUrl: json["gifUrl"] ?? "",
+        id: json["id"] ?? "",
+        name: json["name"] ?? "Unknown Exercise",
+        target: json["target"] ?? "Unknown",
+        secondaryMuscles: json["secondaryMuscles"] != null
+            ? List<String>.from(json["secondaryMuscles"])
+            : [],
+        instructions: json["instructions"] != null
+            ? List<String>.from(json["instructions"])
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
         "bodyPart": bodyPart,
-        "equipment": equipmentValues.reverse[equipment],
+        "equipment": equipment,
         "gifUrl": gifUrl,
         "id": id,
         "name": name,
@@ -55,20 +54,4 @@ class AllFilteredExercises {
         "secondaryMuscles": List<dynamic>.from(secondaryMuscles.map((x) => x)),
         "instructions": List<dynamic>.from(instructions.map((x) => x)),
       };
-}
-
-enum Equipment { ASSISTED }
-
-final equipmentValues = EnumValues({"assisted": Equipment.ASSISTED});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

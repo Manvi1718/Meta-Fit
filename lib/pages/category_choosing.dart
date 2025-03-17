@@ -105,9 +105,29 @@ void showCategory({required BuildContext context}) {
                             // Print or use the selected filter type and value
                             print("Selected Filter: $selectedFilterType");
                             print("Selected Value: $selectedFilterValue");
-                            Filter(
-                                filter: selectedFilterType,
-                                value: selectedFilterValue);
+                            if (selectedFilterType.isNotEmpty &&
+                                selectedFilterValue.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Filter(
+                                    filter: selectedFilterType,
+                                    value: selectedFilterValue,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: ModifiedText(
+                                    text:
+                                        'Please select a filter before searching',
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              );
+                            }
                           },
                         ),
                       ],
