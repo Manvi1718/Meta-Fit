@@ -17,22 +17,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<AllExercises>? allExercisesList;
-
   int selectedIndexOfNavigation = 0;
-
   PageController pageController = PageController();
 
   void onNavigationTapped(int index) {
-    setState(() {
-      selectedIndexOfNavigation = index;
-    });
     pageController.jumpToPage(index);
   }
 
   void necessaryloading() async {
-    final results = await Future.wait([
-      fetchExercises(),
-    ]);
+    final results = await Future.wait([fetchExercises()]);
 
     setState(() {
       allExercisesList = results[0];
@@ -43,6 +36,13 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     necessaryloading();
+
+    // Listen to page swipes
+    pageController.addListener(() {
+      setState(() {
+        selectedIndexOfNavigation = pageController.page?.round() ?? 0;
+      });
+    });
   }
 
   @override
@@ -62,38 +62,33 @@ class _HomeState extends State<Home> {
         height: 70,
         elevation: 5,
         selectedIndex: selectedIndexOfNavigation,
-        onDestinationSelected: (value) {
-          onNavigationTapped(value);
-        },
-        destinations: [
+        onDestinationSelected: onNavigationTapped,
+        destinations: const [
           NavigationDestination(
-              icon: Icon(
-                Icons.home_outlined,
-                size: 28,
-              ),
-              label: 'Home'),
+            icon: Icon(Icons.home_outlined, size: 28),
+            label: 'Home',
+          ),
           NavigationDestination(
-              icon: Icon(
-                Icons.fitness_center_outlined,
-                size: 28,
-              ),
-              label: 'Exercises'),
+            icon: Icon(Icons.fitness_center_outlined, size: 28),
+            label: 'Exercises',
+          ),
           NavigationDestination(
-              icon: Icon(
-                Icons.food_bank_outlined,
-                size: 28,
-              ),
-              label: 'Nutrition'),
+            icon: Icon(Icons.food_bank_outlined, size: 28),
+            label: 'Nutrition',
+          ),
           NavigationDestination(
-              icon: Icon(
-                Icons.favorite_border_outlined,
-                size: 28,
-              ),
-              label: 'Favourites'),
+            icon: Icon(Icons.favorite_border_outlined, size: 28),
+            label: 'Favourites',
+          ),
         ],
       ),
       body: PageView(
         controller: pageController,
+        onPageChanged: (index) {
+          setState(() {
+            selectedIndexOfNavigation = index;
+          });
+        },
         children: [
           HomePage(),
           allExercisesList == null
@@ -104,15 +99,14 @@ class _HomeState extends State<Home> {
                       CircularProgressIndicator(),
                       SizedBox(height: 20),
                       ModifiedText(
-                          text: 'Loading please wait....',
-                          color: Colors.white54,
-                          size: 15)
+                        text: 'Loading please wait....',
+                        color: Colors.white54,
+                        size: 15,
+                      )
                     ],
                   ),
                 )
-              : ExercisesPage(
-                  allExercises: allExercisesList!,
-                ),
+              : ExercisesPage(allExercises: allExercisesList!),
           NutritionPage(),
           FavouritePage(),
         ],
