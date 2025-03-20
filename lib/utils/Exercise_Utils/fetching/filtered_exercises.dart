@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:metafit/utils/JsonParsing/all_filtered_exercises_json_parsing.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_filtered_exercises_json_parsing.dart';
 
 Future<List<AllFilteredExercises>> fetchFilteredExercises(
   String filter,

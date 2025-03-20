@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/pages/filter.dart';
-import 'package:metafit/pages/searched_exercises.dart';
+import 'package:metafit/utils/exercise_utils/searched_exercises.dart';
+import 'package:metafit/utils/exercise_utils/filter.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
 
@@ -97,7 +97,6 @@ void showCategory({required BuildContext context}) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// Header Row with Title & Search Icon
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -119,7 +118,12 @@ void showCategory({required BuildContext context}) {
                                   builder: (context) => SearchedExercises(
                                       nameOfExercise: searchText),
                                 ),
-                              );
+                              ).then((_) {
+                                setState(() {
+                                  searchController
+                                      .clear(); // Clear search bar when coming back
+                                });
+                              });
                             } else if (selectedFilterType.isNotEmpty &&
                                 selectedFilterValue.isNotEmpty) {
                               // Proceed with filter-based search

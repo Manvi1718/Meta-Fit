@@ -3,10 +3,10 @@ import 'package:metafit/pages/exercises.dart';
 import 'package:metafit/pages/favourite.dart';
 import 'package:metafit/pages/home.dart';
 import 'package:metafit/pages/nutrition.dart';
-import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
+import 'package:metafit/utils/Exercise_Utils/fetching/all_exercises.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
-import 'package:metafit/utils/fetching/all_exercises.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_exercises_json_parsing.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/utils/Exercise_Utils/JsonParsing/all_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
-import 'package:metafit/utils/Exercise_Utils/description/exercise_description.dart';
-import 'package:metafit/utils/Exercise_Utils/fetching/search_fetch.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_exercises_json_parsing.dart';
+import 'package:metafit/utils/exercise_utils/description/exercise_description.dart';
+import 'package:metafit/utils/exercise_utils/fetching/search_fetch.dart';
 
 class SearchedExercises extends StatefulWidget {
   final String nameOfExercise;

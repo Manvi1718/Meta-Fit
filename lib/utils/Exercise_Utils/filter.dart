@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/utils/JsonParsing/all_filtered_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
-import 'package:metafit/utils/fetching/filtered_exercises.dart';
-import 'package:metafit/utils/description/filtered_exercise_description.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_filtered_exercises_json_parsing.dart';
+import 'package:metafit/utils/exercise_utils/description/filtered_exercise_description.dart';
+import 'package:metafit/utils/exercise_utils/fetching/filtered_exercises.dart';
 
 class Filter extends StatefulWidget {
   final String filter;

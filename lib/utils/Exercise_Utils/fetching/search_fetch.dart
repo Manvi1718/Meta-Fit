@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_exercises_json_parsing.dart';
 
 Future<List<AllExercises>> fetchSearchedExercises(String name) async {
   var response = await http.get(
@@ -10,6 +10,5 @@ Future<List<AllExercises>> fetchSearchedExercises(String name) async {
         "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
       });
   final result = allExercisesFromJson(response.body);
-  print(result);
   return result;
 }

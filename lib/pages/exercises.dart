@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/utils/category_choosing.dart';
-import 'package:metafit/utils/description/exercise_description.dart';
-import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
+import 'package:metafit/utils/exercise_utils/JsonParsing/all_exercises_json_parsing.dart';
+import 'package:metafit/utils/exercise_utils/category_choosing.dart';
+import 'package:metafit/utils/exercise_utils/description/exercise_description.dart';
 
 class ExercisesPage extends StatelessWidget {
   final List<AllExercises> allExercises;
