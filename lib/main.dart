@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:metafit/pages/initial.dart';
+import 'package:metafit/utils/nutrition_utils/meal_plan_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => MealPlanProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -14,7 +14,6 @@ Future<RandomQuote> fetchRandomQuote() async {
 
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
-    print(jsonData);
     return RandomQuote.fromJson(jsonData); // Correctly parse JSON
   } else {
     throw Exception("Failed to load quote");
