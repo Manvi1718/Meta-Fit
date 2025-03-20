@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metafit/pages/filter.dart';
+import 'package:metafit/pages/searched_exercises.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
 
@@ -76,6 +77,9 @@ void showCategory({required BuildContext context}) {
   String selectedFilterType = "";
   String selectedFilterValue = "";
 
+  // Controller for search bar
+  TextEditingController searchController = TextEditingController();
+
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -93,20 +97,32 @@ void showCategory({required BuildContext context}) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    /// Header Row with Title & Search Icon
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Headings(
-                            text: 'Category', color: Colors.white, size: 30),
+                            text: 'Category Search',
+                            color: Colors.white,
+                            size: 30),
                         IconButton(
                           icon: Icon(Icons.search,
                               color: const Color.fromARGB(255, 194, 249, 196)),
                           onPressed: () {
-                            // Print or use the selected filter type and value
-                            print("Selected Filter: $selectedFilterType");
-                            print("Selected Value: $selectedFilterValue");
-                            if (selectedFilterType.isNotEmpty &&
+                            String searchText = searchController.text.trim();
+
+                            if (searchText.isNotEmpty) {
+                              // Call SearchExercise if user entered an exercise name
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SearchedExercises(
+                                      nameOfExercise: searchText),
+                                ),
+                              );
+                            } else if (selectedFilterType.isNotEmpty &&
                                 selectedFilterValue.isNotEmpty) {
+                              // Proceed with filter-based search
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -121,9 +137,9 @@ void showCategory({required BuildContext context}) {
                                 SnackBar(
                                   content: ModifiedText(
                                     text:
-                                        'Please select a filter before searching',
+                                        'Please enter an exercise or select a filter before searching',
                                     color: Colors.white,
-                                    size: 20,
+                                    size: 18,
                                   ),
                                 ),
                               );
@@ -132,13 +148,37 @@ void showCategory({required BuildContext context}) {
                         ),
                       ],
                     ),
+
                     SizedBox(height: 10),
-                    ModifiedText(
-                      text: 'Choose any one for smoother access',
-                      color: const Color.fromARGB(110, 255, 255, 255),
-                      size: 12,
+
+                    /// Search Bar
+                    TextField(
+                      controller: searchController,
+                      style: TextStyle(color: Colors.white),
+                      cursorColor: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: "Search for an exercise...",
+                        hintStyle: TextStyle(color: Colors.white54),
+                        prefixIcon:
+                            Icon(Icons.fitness_center, color: Colors.white70),
+                        filled: true,
+                        fillColor: Colors.black54,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
+
                     SizedBox(height: 15),
+
+                    ModifiedText(
+                        text: 'Choose any one for smoother access',
+                        color: const Color.fromARGB(110, 255, 255, 255),
+                        size: 12),
+                    SizedBox(height: 15),
+
+                    /// Dropdowns for Filters
                     ModifiedText(
                         text: 'Body Part', color: Colors.white70, size: 18),
                     SizedBox(height: 5),
@@ -161,6 +201,7 @@ void showCategory({required BuildContext context}) {
                       dropdownColor: Colors.black,
                       decoration: InputDecoration(border: OutlineInputBorder()),
                     ),
+
                     SizedBox(height: 15),
                     ModifiedText(
                         text: 'Equipments', color: Colors.white70, size: 18),
@@ -184,6 +225,7 @@ void showCategory({required BuildContext context}) {
                       dropdownColor: Colors.black,
                       decoration: InputDecoration(border: OutlineInputBorder()),
                     ),
+
                     SizedBox(height: 15),
                     ModifiedText(
                         text: 'Target', color: Colors.white70, size: 18),

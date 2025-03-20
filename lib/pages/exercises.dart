@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/pages/category_choosing.dart';
-import 'package:metafit/utils/exercise_description.dart';
+import 'package:metafit/utils/category_choosing.dart';
+import 'package:metafit/utils/description/exercise_description.dart';
 import 'package:metafit/utils/JsonParsing/all_exercises_json_parsing.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
@@ -33,8 +33,8 @@ class ExercisesPage extends StatelessWidget {
                   showCategory(context: context);
                 },
                 child: Icon(
-                  Icons.category_outlined,
-                  color: Colors.white70,
+                  Icons.category_rounded,
+                  color: Colors.green,
                   semanticLabel: 'Category',
                 ),
               )

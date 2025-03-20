@@ -17,20 +17,19 @@ Future<List<AllFilteredExercises>> fetchFilteredExercises(
 
     if (response.statusCode == 200) {
       if (response.body.isEmpty) {
-        print('Warning: Empty response from API');
+        // Warning: Empty response from API
         return [];
       }
-      print('API Response: ${response.body}');
       return allFilteredExercisesFromJson(response.body);
     } else if (response.statusCode == 429) {
-      print('API Rate Limit Exceeded! Try again later.');
+      // API Rate Limit Exceeded! Try again later.
       return [];
     } else {
-      print('API Error: ${response.statusCode} - ${response.body}');
+      // API Error
       return [];
     }
   } catch (e) {
-    print('Fetch Error: $e');
+    // Fetch Error
     return [];
   }
 }
