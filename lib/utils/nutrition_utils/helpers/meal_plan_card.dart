@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:metafit/utils/nutrition_utils/meal_plan_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:metafit/utils/nutrition_utils/helpers/dialogBox/show_dialog_delete.dart';
 
 class MealPlanCard extends StatelessWidget {
   final String mealName;
@@ -11,7 +10,7 @@ class MealPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 8,
+      elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
@@ -38,14 +37,13 @@ class MealPlanCard extends StatelessWidget {
               alignment: Alignment.topRight,
               child: GestureDetector(
                 onTap: () {
-                  Provider.of<MealPlanProvider>(context, listen: false)
-                      .removeMealPlan(index);
+                  confirmDelete(context, index);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.redAccent,
+                    color: Color.fromARGB(255, 210, 75, 75),
                   ),
                   child: const Icon(
                     Icons.delete,

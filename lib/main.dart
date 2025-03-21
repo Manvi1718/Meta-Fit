@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metafit/pages/initial.dart';
-import 'package:metafit/utils/nutrition_utils/meal_plan_provider.dart';
+import 'package:metafit/provider/meal_plan_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {

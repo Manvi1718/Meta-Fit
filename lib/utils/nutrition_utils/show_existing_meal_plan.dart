@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/nutrition_utils/helpers/meal_plan_card.dart';
-import 'package:metafit/utils/nutrition_utils/meal_plan_provider.dart';
+import 'package:metafit/provider/meal_plan_provider.dart';
+import 'package:metafit/utils/nutrition_utils/helpers/dialogBox/show_dialog_deleteAll.dart';
 import 'package:provider/provider.dart';
 
 class ShowExistingMealPlan extends StatelessWidget {
@@ -11,11 +13,20 @@ class ShowExistingMealPlan extends StatelessWidget {
     final mealPlans = Provider.of<MealPlanProvider>(context).mealPlans;
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background for MetaFit
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text("Meal Plans"),
+        title: Headings(text: 'Meal plans', color: Colors.white, size: 20),
         backgroundColor: Colors.black,
         elevation: 0,
+        actions: [
+          mealPlans.isEmpty
+              ? Container()
+              : IconButton(
+                  icon: const Icon(Icons.delete_outline,
+                      color: Color.fromARGB(255, 255, 143, 143), size: 28),
+                  onPressed: () => confirmDeleteAll(context),
+                ),
+        ],
       ),
       body: mealPlans.isEmpty
           ? const Center(

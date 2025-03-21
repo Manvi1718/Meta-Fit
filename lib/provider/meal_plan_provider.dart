@@ -5,13 +5,19 @@ class MealPlanProvider extends ChangeNotifier {
 
   List<String> get mealPlans => _mealPlans;
 
-  void addMealPlan() {
-    _mealPlans.add('Custom Meal ${_mealPlans.length + 1}');
+  void addMealPlan(String? mealPlanName) {
+    mealPlanName = mealPlanName ?? 'Custom Meal ${_mealPlans.length + 1}';
+    _mealPlans.add(mealPlanName);
     notifyListeners();
   }
 
   void removeMealPlan(int index) {
     _mealPlans.removeAt(index);
+    notifyListeners();
+  }
+
+  void removeAllPlans() {
+    _mealPlans.clear();
     notifyListeners();
   }
 }

@@ -29,9 +29,13 @@ class _NutritionPageState extends State<NutritionPage> {
               child: ButtonsTabBar(
                 tabs: const [
                   Tab(
-                      icon: Icon(Icons.food_bank_outlined),
-                      text: 'Meal Generator'),
-                  Tab(icon: Icon(Icons.list), text: 'Meal Plans'),
+                    icon: Icon(Icons.food_bank_outlined),
+                    text: 'Meal Generator',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.list),
+                    text: 'Meal Plans',
+                  ),
                 ],
                 backgroundColor: Colors.green,
                 unselectedBackgroundColor: Colors.grey.shade900,
