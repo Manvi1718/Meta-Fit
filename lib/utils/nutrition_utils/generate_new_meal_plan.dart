@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:metafit/provider/meal_plan_provider.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
+import 'package:metafit/utils/nutrition_utils/json_parsing/meal_planner_json_parsing.dart';
 import 'package:provider/provider.dart';
 import 'package:metafit/utils/nutrition_utils/fetching/meal_plan_fetching.dart';
 
@@ -19,6 +20,8 @@ class _GenerateNewMealPlanState extends State<GenerateNewMealPlan> {
   String? selectedDiet;
   String? selectedTimeFrame;
   bool isLoading = false;
+
+  MealPlanner? customPlan;
 
   final List<String> timeFrames = ['Day ⏰', 'Week 🗓'];
   final List<String> dietTypes = [
@@ -69,7 +72,7 @@ class _GenerateNewMealPlanState extends State<GenerateNewMealPlan> {
       isLoading = true;
     });
     try {
-      await mealPlanFetch(
+      customPlan = await mealPlanFetch(
         time: selectedTimeFrame!.split(' ')[0].toLowerCase(),
         calories: caloriesController.text,
         diet: selectedDiet!.split(' ')[0].toLowerCase(),
@@ -81,7 +84,7 @@ class _GenerateNewMealPlanState extends State<GenerateNewMealPlan> {
 
       // Add meal to provider
       Provider.of<MealPlanProvider>(context, listen: false)
-          .addMealPlan(mealNameController.text);
+          .addMealPlan(mealNameController.text, customPlan);
 
       showDialog(
         context: context,

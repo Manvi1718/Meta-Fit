@@ -47,7 +47,7 @@ class ShowExistingMealPlan extends StatelessWidget {
                 itemCount: mealPlans.length,
                 itemBuilder: (context, index) {
                   return MealPlanCard(
-                    mealName: mealPlans[index],
+                    mealName: mealPlans[index]["name"],
                     index: index,
                   );
                 },

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:metafit/utils/home_utils/fetching/quote_fetching.dart';
 import 'package:metafit/utils/home_utils/json_parsing/quote_json_parsing.dart';
