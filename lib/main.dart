@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:metafit/firebase_options.dart';
-import 'package:metafit/pages/initial.dart';
+import 'package:metafit/pages/wrapper.dart';
 import 'package:metafit/provider/meal_plan_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,12 +24,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: const Color.fromARGB(255, 33, 33, 33)),
-      home: Home(),
+      home: Wrapper(),
     );
   }
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:metafit/utils/home_utils/fetching/quote_fetching.dart';
 import 'package:metafit/utils/home_utils/json_parsing/quote_json_parsing.dart';
 
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   RandomQuote? randomQuote;
   bool isLoading = true;
+  String? userEmail;
 
   void loadQuote() async {
     setState(() {
@@ -31,96 +34,162 @@ class _HomePageState extends State<HomePage> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to fetch quote!")),
+        const SnackBar(content: Text("Failed to fetch quote!")),
       );
+    }
+  }
+
+  void getUserDetails() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userEmail = user.email;
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
+    getUserDetails();
     loadQuote();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text("Daily Motivation",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: isLoading
-              ? const CircularProgressIndicator(color: Colors.deepOrange)
-              : randomQuote != null
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade900,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color.fromARGB(125, 255, 86, 34),
-                                blurRadius: 10,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              const Icon(Icons.format_quote_rounded,
-                                  color: Colors.deepOrange, size: 50),
-                              const SizedBox(height: 15),
-                              Text(
-                                randomQuote!.quote,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                "- ${randomQuote!.author}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.deepOrange.shade200,
-                                ),
-                              ),
-                            ],
-                          ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF121212), Color(0xFF1E1E1E)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // 🟠 Welcome Message
+              if (userEmail != null) ...[
+                Text(
+                  "Welcome Back,",
+                  style: GoogleFonts.poppins(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white70,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  userEmail!,
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+
+              // 🎯 Motivation Title
+              Text(
+                "Daily Motivation",
+                style: GoogleFonts.poppins(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // 💡 Quote Display
+              Expanded(
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.orange,
                         ),
-                        const SizedBox(height: 25),
-                        ElevatedButton.icon(
-                          onPressed: loadQuote,
-                          icon: const Icon(Icons.refresh, color: Colors.white),
-                          label: const Text("New Quote"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepOrange,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      )
+                    : randomQuote != null
+                        ? AnimatedContainer(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(187, 0, 0, 0),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color.fromARGB(79, 255, 153, 0),
+                                  blurRadius: 12,
+                                  spreadRadius: 2,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.format_quote_rounded,
+                                    color: Colors.orange, size: 50),
+                                const SizedBox(height: 15),
+                                Text(
+                                  randomQuote!.quote,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                Text(
+                                  "- ${randomQuote!.author}",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.orange.shade200,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const Center(
+                            child: Text(
+                              "No quote available",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : const Text(
-                      "No quote available",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+              ),
+              const SizedBox(height: 30),
+
+              // 🔄 New Quote Button
+              ElevatedButton.icon(
+                onPressed: loadQuote,
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                label: const Text(
+                  "New Quote",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
