@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:metafit/pages/Authentication/forgot.dart';
 import 'package:metafit/pages/Authentication/signup.dart';
 import 'package:metafit/utils/TextFunctions/headings.dart';
@@ -17,7 +16,6 @@ class _LogInState extends State<LogIn> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   bool isPasswordVisible = false;
-  final LocalAuthentication auth = LocalAuthentication();
 
   @override
   void initState() {
