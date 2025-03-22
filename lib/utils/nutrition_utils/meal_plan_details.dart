@@ -27,6 +27,7 @@ class MealPlanDetails extends StatelessWidget {
                   mealPlan: mealPlan,
                   dayName: 'Day',
                   dayMeal: true,
+                  mealPlanName: mealPlan.mealPlanName,
                 )
           : const Center(
               child: Text("Meal Plan Not Found!",

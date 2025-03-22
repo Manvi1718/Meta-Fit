@@ -35,9 +35,12 @@ class WeekView extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => DayView(
                   mealPlan: MealPlanner(
-                      meals: dayPlan.meals, nutrients: dayPlan.nutrients),
+                      meals: dayPlan.meals,
+                      nutrients: dayPlan.nutrients,
+                      mealPlanName: mealPlan.mealPlanName),
                   dayName: dayName,
                   dayMeal: false,
+                  mealPlanName: mealPlan.mealPlanName,
                 ),
               ),
             ),

@@ -6,42 +6,38 @@ MealPlanner mealPlannerFromJson(String str) =>
 String mealPlannerToJson(MealPlanner data) => json.encode(data.toJson());
 
 class MealPlanner {
-  Week? week; // For "week" time frame
-  List<Meal>? meals; // For "day" time frame
-  Nutrients? nutrients; // For "day" time frame
+  String mealPlanName; // Add this field
+  Week? week;
+  List<Meal>? meals;
+  Nutrients? nutrients;
 
   MealPlanner({
+    required this.mealPlanName, // Include meal name
     this.week,
     this.meals,
     this.nutrients,
   });
 
   factory MealPlanner.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey("week")) {
-      // Week-based meal plan
-      return MealPlanner(week: Week.fromJson(json["week"]));
-    } else if (json.containsKey("meals") && json.containsKey("nutrients")) {
-      // Day-based meal plan
-      return MealPlanner(
-        meals: List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x))),
-        nutrients: Nutrients.fromJson(json["nutrients"]),
-      );
-    } else {
-      throw Exception("Invalid meal plan format");
-    }
+    return MealPlanner(
+      mealPlanName: json["mealPlanName"] ?? "", // Fetch meal plan name
+      week: json["week"] != null ? Week.fromJson(json["week"]) : null,
+      meals: json["meals"] != null
+          ? List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x)))
+          : null,
+      nutrients: json["nutrients"] != null
+          ? Nutrients.fromJson(json["nutrients"])
+          : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    if (week != null) {
-      return {"week": week!.toJson()};
-    } else if (meals != null && nutrients != null) {
-      return {
-        "meals": List<dynamic>.from(meals!.map((x) => x.toJson())),
-        "nutrients": nutrients!.toJson(),
-      };
-    } else {
-      return {};
-    }
+    return {
+      "mealPlanName": mealPlanName, // Ensure name is stored
+      if (week != null) "week": week!.toJson(),
+      if (meals != null) "meals": meals!.map((x) => x.toJson()).toList(),
+      if (nutrients != null) "nutrients": nutrients!.toJson(),
+    };
   }
 }
 

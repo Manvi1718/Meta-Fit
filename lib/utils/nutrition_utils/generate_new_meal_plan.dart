@@ -82,9 +82,15 @@ class _GenerateNewMealPlanState extends State<GenerateNewMealPlan> {
         isLoading = false;
       });
 
-      // Add meal to provider
-      Provider.of<MealPlanProvider>(context, listen: false)
-          .addMealPlan(mealNameController.text, customPlan);
+      if (customPlan != null) {
+        Provider.of<MealPlanProvider>(context, listen: false)
+            .addMealPlan(mealNameController.text, customPlan!);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("Error: Meal plan could not be created.")),
+        );
+      }
 
       showDialog(
         context: context,

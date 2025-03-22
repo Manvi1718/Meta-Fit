@@ -46,7 +46,7 @@ class MealPlanCard extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   onTap: () {
-                    confirmDelete(context, index);
+                    confirmDelete(context, mealName);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),

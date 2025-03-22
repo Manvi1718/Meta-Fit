@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:metafit/provider/meal_plan_provider.dart';
@@ -28,20 +28,23 @@ void confirmDeleteAll(BuildContext context) {
           ),
           TextButton(
             onPressed: () {
-              Provider.of<MealPlanProvider>(context, listen: false)
+              Provider.of<MealPlanProvider>(ctx, listen: false)
                   .removeAllPlans();
               Navigator.of(ctx).pop();
 
-              // Show Snackbar after deletion
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "All meal plans have been deleted.",
-                    style: TextStyle(color: Colors.black),
+              // Use Future.delayed to ensure context is still valid
+              Future.delayed(Duration(milliseconds: 300), () {
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "All meal plans have been deleted.",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    backgroundColor: Colors.white,
+                    duration: Duration(seconds: 2),
                   ),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+                );
+              });
             },
             child: const Text("Delete",
                 style: TextStyle(color: Colors.redAccent, fontSize: 16)),

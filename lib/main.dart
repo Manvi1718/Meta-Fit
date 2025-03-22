@@ -11,12 +11,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => MealPlanProvider(),
-      child: const MyApp(),
-    ),
-  );
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,12 +20,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MealPlanProvider()),
+      ],
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
           brightness: Brightness.dark,
-          primaryColor: const Color.fromARGB(255, 33, 33, 33)),
-      home: Wrapper(),
+          primaryColor: const Color.fromARGB(255, 33, 33, 33),
+        ),
+        home: Wrapper(),
+      ),
     );
   }
 }
