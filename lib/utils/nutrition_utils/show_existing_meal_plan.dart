@@ -32,35 +32,30 @@ class _ShowExistingMealPlanState extends State<ShowExistingMealPlan> {
         return Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
-            title: Headings(text: 'Meal plans', color: Colors.white, size: 20),
+            title:
+                Headings(text: 'Meal Plans 🍽️', color: Colors.white, size: 20),
             backgroundColor: Colors.black,
             elevation: 0,
             actions: [
-              mealPlans.isEmpty
-                  ? Container()
-                  : IconButton(
-                      icon: const Icon(Icons.delete_outline,
-                          color: Color.fromARGB(255, 255, 143, 143), size: 28),
-                      onPressed: () => confirmDeleteAll(context),
-                    ),
+              if (mealPlans.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.delete_outline,
+                      color: Color.fromARGB(255, 255, 143, 143), size: 28),
+                  onPressed: () => confirmDeleteAll(context),
+                ),
             ],
           ),
           body: mealPlans.isEmpty
-              ? const Center(
-                  child: Text(
-                    'No meal plans yet. Generate one!',
-                    style: TextStyle(fontSize: 18, color: Colors.white70),
-                  ),
-                )
+              ? _buildEmptyState()
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // 2 cards per row
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.9,
                     ),
                     itemCount: mealPlans.length,
                     itemBuilder: (context, index) {
@@ -73,6 +68,23 @@ class _ShowExistingMealPlanState extends State<ShowExistingMealPlan> {
                 ),
         );
       },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.fastfood_outlined, size: 60, color: Colors.white54),
+          SizedBox(height: 10),
+          Text(
+            'No meal plans yet.\nGenerate one!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.white70),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -16,6 +16,7 @@ class SearchedExercises extends StatefulWidget {
 class _SearchedExercisesState extends State<SearchedExercises> {
   late String name;
   List<AllExercises>? searchedExercises;
+  final Set<int> likedExercises = {}; // Store liked exercises
 
   @override
   void initState() {
@@ -36,10 +37,12 @@ class _SearchedExercisesState extends State<SearchedExercises> {
     return Scaffold(
       appBar: AppBar(
         title: Headings(
-          text: 'Search Result for $name',
+          text: 'Search Results for "$name"',
           color: Colors.white,
-          size: 20,
+          size: 22,
         ),
+        backgroundColor: Colors.black,
+        elevation: 0,
       ),
       body: Container(
         padding: EdgeInsets.all(10),
@@ -57,8 +60,7 @@ class _SearchedExercisesState extends State<SearchedExercises> {
             Expanded(
               child: searchedExercises == null
                   ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                      child: CircularProgressIndicator(color: Colors.orange))
                   : searchedExercises!.isEmpty
                       ? Center(
                           child: ModifiedText(
@@ -70,69 +72,135 @@ class _SearchedExercisesState extends State<SearchedExercises> {
                       : ListView.builder(
                           itemCount: searchedExercises!.length,
                           itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                showExerciseDescription(
-                                  context: context,
-                                  exercise: searchedExercises![index],
-                                );
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[850],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
+                            final exercise = searchedExercises![index];
+                            final isLiked = likedExercises.contains(index);
+
+                            return AnimatedContainer(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white
+                                    .withOpacity(0.08), // Glassmorphism effect
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 8,
+                                    spreadRadius: 2,
+                                    offset: Offset(2, 4),
+                                  ),
+                                ],
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  showExerciseDescription(
+                                      context: context, exercise: exercise);
+                                },
+                                borderRadius: BorderRadius.circular(12),
+                                child: Stack(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        searchedExercises![index].gifUrl,
-                                        height: 250,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Headings(
-                                          text:
-                                              '${index + 1} - ${searchedExercises![index].name}',
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                        SizedBox(height: 12),
-                                        ModifiedText(
-                                          text:
-                                              '🎯 Target Muscles : ${searchedExercises![index].target}',
-                                          color: Colors.white,
-                                          size: 12,
-                                        ),
-                                        SizedBox(height: 2),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            ModifiedText(
-                                              text:
-                                                  '🏋️ Equipment : ${searchedExercises![index].equipment}',
-                                              color: Colors.white,
-                                              size: 12,
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(12)),
+                                          child: Image.network(
+                                            exercise.gifUrl,
+                                            height: 250,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder:
+                                                (context, child, progress) {
+                                              if (progress == null)
+                                                return child;
+                                              return Container(
+                                                height: 250,
+                                                alignment: Alignment.center,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        color: Colors.orange),
+                                              );
+                                            },
+                                            errorBuilder:
+                                                (context, error, stackTrace) =>
+                                                    Container(
+                                              height: 250,
+                                              color: Colors.black26,
+                                              child: Center(
+                                                child: Icon(
+                                                    Icons.image_not_supported,
+                                                    color: Colors.white60,
+                                                    size: 50),
+                                              ),
                                             ),
-                                            Icon(
-                                              Icons.favorite_border,
-                                              color: Colors.white,
-                                            )
-                                          ],
-                                        )
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(12),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Headings(
+                                                text:
+                                                    '${index + 1}. ${exercise.name}',
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                              SizedBox(height: 10),
+                                              ModifiedText(
+                                                text:
+                                                    '🎯 Target: ${exercise.target}',
+                                                color: Colors.orangeAccent,
+                                                size: 14,
+                                              ),
+                                              SizedBox(height: 5),
+                                              ModifiedText(
+                                                text:
+                                                    '🏋️ Equipment: ${exercise.equipment}',
+                                                color: Colors.white70,
+                                                size: 14,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
-                                    )
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      right: 10,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            if (isLiked) {
+                                              likedExercises.remove(index);
+                                            } else {
+                                              likedExercises.add(index);
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            isLiked
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: isLiked
+                                                ? Colors.orange
+                                                : Colors.white70,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

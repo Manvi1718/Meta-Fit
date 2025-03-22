@@ -8,65 +8,87 @@ class DayView extends StatelessWidget {
   final bool dayMeal;
   final MealPlanner mealPlan;
   final String dayName;
-  final String mealPlanName; // ✅ Add this
+  final String mealPlanName;
 
   const DayView({
     super.key,
     required this.mealPlan,
     required this.dayName,
     required this.dayMeal,
-    required this.mealPlanName, // ✅ Add this
+    required this.mealPlanName,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: dayMeal == false
           ? AppBar(
+              backgroundColor: Colors.black,
+              elevation: 2,
               title: Headings(
                   text: "$mealPlanName - $dayName",
                   color: Colors.white,
-                  size: 25),
+                  size: 22),
             )
           : null,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Headings(
-                text: "Nutritional Breakdown", color: Colors.white, size: 20),
+            _buildSectionTitle("🔥 Nutritional Breakdown"),
             const SizedBox(height: 10),
-            if (mealPlan.nutrients != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ModifiedText(
-                      text: "🔥 Calories: ${mealPlan.nutrients!.calories} kcal",
-                      color: Colors.yellow,
-                      size: 15),
-                  ModifiedText(
-                      text: "💪 Protein: ${mealPlan.nutrients!.protein} g",
-                      color: Colors.yellow,
-                      size: 15),
-                  ModifiedText(
-                      text: "🍔 Fat: ${mealPlan.nutrients!.fat} g",
-                      color: Colors.yellow,
-                      size: 15),
-                  ModifiedText(
-                      text: "🍞 Carbs: ${mealPlan.nutrients!.carbohydrates} g",
-                      color: Colors.yellow,
-                      size: 15),
-                ],
-              ),
+            mealPlan.nutrients != null
+                ? _buildNutritionalInfo(mealPlan.nutrients!)
+                : _buildNoDataMessage("No nutrition data available."),
             const SizedBox(height: 30),
-            Headings(text: "🍽️ Meals", color: Colors.white, size: 20),
+            _buildSectionTitle("🍽️ Meals"),
             const SizedBox(height: 10),
-            if (mealPlan.meals != null)
-              ...mealPlan.meals!.map((meal) => MealCard(meal: meal)),
+            mealPlan.meals != null && mealPlan.meals!.isNotEmpty
+                ? Column(
+                    children: mealPlan.meals!
+                        .map((meal) => MealCard(meal: meal))
+                        .toList(),
+                  )
+                : _buildNoDataMessage("No meals found for this day."),
           ],
         ),
       ),
+    );
+  }
+
+  // 🔹 Section Title Widget
+  Widget _buildSectionTitle(String text) {
+    return Headings(text: text, color: Colors.white, size: 20);
+  }
+
+  // 🔹 Nutritional Info Widget
+  Widget _buildNutritionalInfo(Nutrients nutrients) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildNutrientItem("🔥 Calories", "${nutrients.calories} kcal"),
+        _buildNutrientItem("💪 Protein", "${nutrients.protein} g"),
+        _buildNutrientItem("🍔 Fat", "${nutrients.fat} g"),
+        _buildNutrientItem("🍞 Carbs", "${nutrients.carbohydrates} g"),
+      ],
+    );
+  }
+
+  // 🔹 Single Nutrient Item
+  Widget _buildNutrientItem(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child:
+          ModifiedText(text: "$label: $value", color: Colors.yellow, size: 16),
+    );
+  }
+
+  // 🔹 No Data Message
+  Widget _buildNoDataMessage(String message) {
+    return Center(
+      child: ModifiedText(text: message, color: Colors.white54, size: 16),
     );
   }
 }

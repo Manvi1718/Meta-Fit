@@ -17,8 +17,11 @@ class MealPlanDetails extends StatelessWidget {
             .getMealPlanByName(mealPlanName);
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Headings(text: mealPlanName, color: Colors.white, size: 25),
+        title: Headings(text: mealPlanName, color: Colors.white, size: 22),
+        backgroundColor: Colors.black,
+        elevation: 2,
       ),
       body: mealPlan != null
           ? (mealPlan.week != null)
@@ -29,9 +32,24 @@ class MealPlanDetails extends StatelessWidget {
                   dayMeal: true,
                   mealPlanName: mealPlan.mealPlanName,
                 )
-          : const Center(
-              child: Text("Meal Plan Not Found!",
-                  style: TextStyle(color: Colors.white))),
+          : _buildErrorState(),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, size: 60, color: Colors.white54),
+          SizedBox(height: 10),
+          Text(
+            "Meal Plan Not Found!",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.white70),
+          ),
+        ],
+      ),
     );
   }
 }

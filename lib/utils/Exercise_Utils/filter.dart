@@ -1,3 +1,4 @@
+import 'dart:ui'; // For blur effect
 import 'package:flutter/material.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
@@ -16,6 +17,7 @@ class Filter extends StatefulWidget {
 
 class _FilterState extends State<Filter> {
   List<AllFilteredExercises>? filteredExercises;
+  Set<int> likedExercises = {}; // Track liked exercises using index
 
   void loadFilteredExercises() async {
     var exercise = await fetchFilteredExercises(widget.filter, widget.value);
@@ -33,113 +35,148 @@ class _FilterState extends State<Filter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // Dark theme background
       appBar: AppBar(
         title: Headings(
-            text: '${widget.filter} - ${widget.value}',
-            color: Colors.white,
-            size: 20),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        // color: Theme.of(context).primaryColor,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Colors.grey.shade900],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          text: '${widget.filter} - ${widget.value}',
+          color: Colors.white,
+          size: 20,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Expanded(
-              child: filteredExercises == null
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      itemCount: filteredExercises!.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            showFilteredExerciseDescription(
-                              context: context,
-                              exercise: filteredExercises![index],
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[850],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
+        backgroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: filteredExercises == null
+            ? Center(
+                child: CircularProgressIndicator(color: Colors.orangeAccent))
+            : ListView.builder(
+                itemCount: filteredExercises!.length,
+                itemBuilder: (context, index) {
+                  final exercise = filteredExercises![index];
+                  final isLiked = likedExercises.contains(index);
+
+                  return AnimatedContainer(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white
+                          .withOpacity(0.08), // Glassmorphism effect
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                          offset: Offset(2, 4),
+                        ),
+                      ],
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showFilteredExerciseDescription(
+                          context: context,
+                          exercise: exercise,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Hero(
+                                tag:
+                                    'exerciseImage-${exercise.name}', // Smooth transition effect
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                  ),
                                   child: Image.network(
-                                    filteredExercises![index].gifUrl,
+                                    exercise.gifUrl,
                                     height: 250,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
+                                    loadingBuilder: (context, child, progress) {
+                                      if (progress == null) return child;
+                                      return Container(
+                                        height: 250,
+                                        alignment: Alignment.center,
+                                        child: CircularProgressIndicator(
+                                            color: Colors.orangeAccent),
+                                      );
+                                    },
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Column(
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Headings(
-                                      text:
-                                          '${index + 1} - ${filteredExercises![index].name}',
+                                      text: '${exercise.name}',
                                       color: Colors.white,
                                       size: 20,
                                     ),
-                                    SizedBox(
-                                      height: 12,
-                                    ),
+                                    SizedBox(height: 8),
                                     ModifiedText(
                                       text:
-                                          '🎯 Target Muscles : ${filteredExercises![index].target}',
-                                      color: Colors.white,
-                                      size: 12,
+                                          '🎯 Target Muscles: ${exercise.target}',
+                                      color: Colors.white70,
+                                      size: 14,
                                     ),
-                                    SizedBox(
-                                      height: 2,
+                                    SizedBox(height: 4),
+                                    ModifiedText(
+                                      text:
+                                          '🏋️ Equipment: ${exercise.equipment}',
+                                      color: Colors.white70,
+                                      size: 14,
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ModifiedText(
-                                          text:
-                                              '🏋️ Equipment : ${filteredExercises![index].equipment}',
-                                          color: Colors.white,
-                                          size: 12,
-                                        ),
-                                        Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.white,
-                                        )
-                                      ],
-                                    )
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (isLiked) {
+                                    likedExercises.remove(index);
+                                  } else {
+                                    likedExercises.add(index);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  isLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isLiked
+                                      ? Colors.orangeAccent
+                                      : Colors.white,
+                                  size: 24,
+                                ),
+                              ),
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-            ),
-          ],
-        ),
+                  );
+                },
+              ),
       ),
     );
   }

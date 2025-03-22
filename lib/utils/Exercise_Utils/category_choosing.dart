@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:metafit/utils/exercise_utils/searched_exercises.dart';
 import 'package:metafit/utils/exercise_utils/filter.dart';
 import 'package:metafit/utils/TextFunctions/Headings.dart';
 import 'package:metafit/utils/TextFunctions/text.dart';
 
 void showCategory({required BuildContext context}) {
-  List<String> allBodyPartList = [
+  final List<String> allBodyPartList = [
     "back",
     "cardio",
     "chest",
@@ -17,7 +18,7 @@ void showCategory({required BuildContext context}) {
     "upper legs",
     "waist"
   ];
-  List<String> allEquipmentList = [
+  final List<String> allEquipmentList = [
     "assisted",
     "band",
     "barbell",
@@ -47,7 +48,7 @@ void showCategory({required BuildContext context}) {
     "weighted",
     "wheel roller"
   ];
-  List<String> allTargetList = [
+  final List<String> allTargetList = [
     "abductors",
     "abs",
     "adductors",
@@ -72,16 +73,13 @@ void showCategory({required BuildContext context}) {
   String? selectedBodyPart;
   String? selectedEquipment;
   String? selectedTarget;
-
-  // This variable will store the selected filter type and its value
   String selectedFilterType = "";
   String selectedFilterValue = "";
-
-  // Controller for search bar
   TextEditingController searchController = TextEditingController();
 
   showModalBottomSheet(
     isScrollControlled: true,
+    backgroundColor: Colors.transparent,
     context: context,
     builder: (context) {
       return DraggableScrollableSheet(
@@ -93,167 +91,125 @@ void showCategory({required BuildContext context}) {
           return StatefulBuilder(
             builder: (context, setState) {
               return Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Headings(
-                            text: 'Category Search',
-                            color: Colors.white,
-                            size: 30),
-                        IconButton(
-                          icon: Icon(Icons.search,
-                              color: const Color.fromARGB(255, 194, 249, 196)),
-                          onPressed: () {
-                            String searchText = searchController.text.trim();
-
-                            if (searchText.isNotEmpty) {
-                              // Call SearchExercise if user entered an exercise name
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SearchedExercises(
-                                      nameOfExercise: searchText),
-                                ),
-                              ).then((_) {
-                                setState(() {
-                                  searchController
-                                      .clear(); // Clear search bar when coming back
-                                });
-                              });
-                            } else if (selectedFilterType.isNotEmpty &&
-                                selectedFilterValue.isNotEmpty) {
-                              // Proceed with filter-based search
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Filter(
-                                    filter: selectedFilterType,
-                                    value: selectedFilterValue,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: ModifiedText(
-                                    text:
-                                        'Please enter an exercise or select a filter before searching',
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10),
-
-                    /// Search Bar
-                    TextField(
-                      controller: searchController,
-                      style: TextStyle(color: Colors.white),
-                      cursorColor: Colors.white,
-                      decoration: InputDecoration(
-                        hintText: "Search for an exercise...",
-                        hintStyle: TextStyle(color: Colors.white54),
-                        prefixIcon:
-                            Icon(Icons.fitness_center, color: Colors.white70),
-                        filled: true,
-                        fillColor: Colors.black54,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 15),
-
-                    ModifiedText(
-                        text: 'Choose any one for smoother access',
-                        color: const Color.fromARGB(110, 255, 255, 255),
-                        size: 12),
-                    SizedBox(height: 15),
-
-                    /// Dropdowns for Filters
-                    ModifiedText(
-                        text: 'Body Part', color: Colors.white70, size: 18),
-                    SizedBox(height: 5),
-                    DropdownButtonFormField<String>(
-                      value: selectedBodyPart,
-                      items: allBodyPartList.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item,
-                              style: TextStyle(color: Colors.white70)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedBodyPart = value;
-                          selectedFilterType = "bodyPart";
-                          selectedFilterValue = value ?? "";
-                        });
-                      },
-                      dropdownColor: Colors.black,
-                      decoration: InputDecoration(border: OutlineInputBorder()),
-                    ),
-
-                    SizedBox(height: 15),
-                    ModifiedText(
-                        text: 'Equipments', color: Colors.white70, size: 18),
-                    SizedBox(height: 5),
-                    DropdownButtonFormField<String>(
-                      value: selectedEquipment,
-                      items: allEquipmentList.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item,
-                              style: TextStyle(color: Colors.white70)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedEquipment = value;
-                          selectedFilterType = "equipment";
-                          selectedFilterValue = value ?? "";
-                        });
-                      },
-                      dropdownColor: Colors.black,
-                      decoration: InputDecoration(border: OutlineInputBorder()),
-                    ),
-
-                    SizedBox(height: 15),
-                    ModifiedText(
-                        text: 'Target', color: Colors.white70, size: 18),
-                    SizedBox(height: 5),
-                    DropdownButtonFormField<String>(
-                      value: selectedTarget,
-                      items: allTargetList.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item,
-                              style: TextStyle(color: Colors.white70)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedTarget = value;
-                          selectedFilterType = "target";
-                          selectedFilterValue = value ?? "";
-                        });
-                      },
-                      dropdownColor: Colors.black,
-                      decoration: InputDecoration(border: OutlineInputBorder()),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  color: Colors.black.withOpacity(0.7),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      spreadRadius: 2,
                     ),
                   ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Headings(
+                                  text: 'Category Search',
+                                  color: Colors.white,
+                                  size: 28),
+                              IconButton(
+                                icon: Icon(Icons.search,
+                                    color: Colors.orangeAccent),
+                                onPressed: () {
+                                  String searchText =
+                                      searchController.text.trim();
+                                  if (searchText.isNotEmpty) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SearchedExercises(
+                                            nameOfExercise: searchText),
+                                      ),
+                                    ).then((_) => setState(
+                                        () => searchController.clear()));
+                                  } else if (selectedFilterType.isNotEmpty &&
+                                      selectedFilterValue.isNotEmpty) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Filter(
+                                            filter: selectedFilterType,
+                                            value: selectedFilterValue),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: ModifiedText(
+                                          text:
+                                              'Please enter an exercise or select a filter before searching',
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black45,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TextField(
+                              controller: searchController,
+                              style: TextStyle(color: Colors.white),
+                              cursorColor: Colors.orangeAccent,
+                              decoration: InputDecoration(
+                                hintText: "Search for an exercise...",
+                                hintStyle: TextStyle(color: Colors.white54),
+                                prefixIcon: Icon(Icons.fitness_center,
+                                    color: Colors.white70),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(10),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          _buildDropdown("Select Body Part", selectedBodyPart,
+                              allBodyPartList, (value) {
+                            setState(() {
+                              selectedBodyPart = value;
+                              selectedFilterType = "bodyPart";
+                              selectedFilterValue = value ?? "";
+                            });
+                          }),
+                          SizedBox(height: 15),
+                          _buildDropdown("Select Equipment", selectedEquipment,
+                              allEquipmentList, (value) {
+                            setState(() {
+                              selectedEquipment = value;
+                              selectedFilterType = "equipment";
+                              selectedFilterValue = value ?? "";
+                            });
+                          }),
+                          SizedBox(height: 15),
+                          _buildDropdown("Select Target Muscle", selectedTarget,
+                              allTargetList, (value) {
+                            setState(() {
+                              selectedTarget = value;
+                              selectedFilterType = "target";
+                              selectedFilterValue = value ?? "";
+                            });
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
@@ -261,5 +217,24 @@ void showCategory({required BuildContext context}) {
         },
       );
     },
+  );
+}
+
+Widget _buildDropdown(String label, String? value, List<String> items,
+    ValueChanged<String?> onChanged) {
+  return DropdownButtonFormField<String>(
+    value: value,
+    items: items
+        .map((item) => DropdownMenuItem(
+            value: item,
+            child: Text(item, style: TextStyle(color: Colors.white))))
+        .toList(),
+    onChanged: onChanged,
+    dropdownColor: Colors.black,
+    decoration: InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.white54),
+      border: OutlineInputBorder(),
+    ),
   );
 }

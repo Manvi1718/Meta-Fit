@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:metafit/pages/exercises.dart';
-import 'package:metafit/pages/favourite.dart';
 import 'package:metafit/pages/home.dart';
 import 'package:metafit/pages/nutrition.dart';
 import 'package:metafit/pages/wrapper.dart';
@@ -134,11 +133,6 @@ class _HomeState extends State<Home> {
             selectedIcon: Icon(Icons.food_bank, size: 28, color: Colors.orange),
             label: 'Nutrition',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_border_outlined, size: 26),
-            selectedIcon: Icon(Icons.favorite, size: 28, color: Colors.orange),
-            label: 'Favourites',
-          ),
         ],
       ),
       body: PageView(
@@ -163,7 +157,6 @@ class _HomeState extends State<Home> {
                 )
               : ExercisesPage(allExercises: allExercisesList!),
           NutritionPage(),
-          FavouritePage(),
         ],
       ),
     );

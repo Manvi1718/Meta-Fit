@@ -132,31 +132,34 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.format_quote_rounded,
-                                    color: Colors.orange, size: 50),
-                                const SizedBox(height: 15),
-                                Text(
-                                  randomQuote!.quote,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
+                            child: SingleChildScrollView(
+                              // ✅ This prevents overflow
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.format_quote_rounded,
+                                      color: Colors.orange, size: 50),
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    randomQuote!.quote,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 15),
-                                Text(
-                                  "- ${randomQuote!.author}",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.orange.shade200,
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    "- ${randomQuote!.author}",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.orange.shade200,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           )
                         : const Center(
