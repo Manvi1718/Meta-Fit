@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:metafit/utils/exercise_utils/JsonParsing/all_filtered_exercises_json_parsing.dart';
 
@@ -6,11 +7,12 @@ Future<List<AllFilteredExercises>> fetchFilteredExercises(
   String value,
 ) async {
   try {
+    final exerciseApi = dotenv.env['EXERCISE_QUOTE_API'];
     var response = await http.get(
       Uri.parse(
           'https://exercisedb.p.rapidapi.com/exercises/$filter/$value?limit=25'),
       headers: {
-        "X-RapidAPI-Key": "9572cc1ceamshb15636ae5cb5660p18b963jsn99ad2ef521aa",
+        "X-RapidAPI-Key": exerciseApi.toString(),
         "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
       },
     );
